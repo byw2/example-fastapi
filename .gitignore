@@ -1,0 +1,5 @@
+__pycache__
+# takes up a lot of space; instead people can create their own venv
+venv/
+# do not want to leak all our credentials
+.env
