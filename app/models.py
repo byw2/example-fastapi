@@ -1,6 +1,6 @@
 # Every model represents table in database
 from tkinter import CASCADE
-from database import Base
+from app.database import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import null, text

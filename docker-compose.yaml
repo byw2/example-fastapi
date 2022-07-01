@@ -1,0 +1,54 @@
+# version of Docker we want
+version: "3"
+# service is a container (4 containers needs 4 services)
+services:
+  # container name
+  api:
+    # specify build image for us in the current working directory
+    build: .
+    # creates a dependency on postgres so postgres is built first
+    depends_on:
+      - postgres
+    # open up a port on local server for outside world to interact 
+    # with our container 
+    # syntax: <port on local host>:<port on container (specified in Dockerfile)>
+    # interpretation: whenever we send traffic to port 4000 on local, 
+    # route to 8000 in Docker container
+    ports:
+      - 8000:8000
+    volumes:
+      # creates a bind mount which will sync changes in local to Docker container
+      # container can only read from local
+      - ./:/usr/src/app:ro
+    # overwrite command from Dockerfile
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    # can point to environment variable file in local
+    # env_file:
+    #   - ./.env
+    environment:
+      # networking with docker allows database host to be postgres container (using
+      # a reference by IP address)
+      - DATABASE_HOSTNAME=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_PASSWORD=Sqlbet345!
+      - DATABASE_NAME=fastapi
+      - DATABASE_USERNAME=postgres
+      - SECRET_KEY=00b1a1fafee44d2ff474995196f7b0dc031ef3cb90e3eaf2a4ea1b2b00de6dae
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+  
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=Sqlbet345!
+      # name of Postgres database
+      - POSTGRES_DB=fastapi
+    volumes:
+      # path of DB within container where Postgres will write to
+      - postgres-db:/var/lib/postgresql/data
+
+# need to create this in named volume, so multiple containers can access the data
+# by a simple reference to this
+volumes:
+  postgres-db: 
+

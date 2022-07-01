@@ -1,12 +1,11 @@
 from fastapi import FastAPI
-from database import engine
-from routers import post, user, auth, vote
+from app.database import engine
+from app.routers import post, user, auth, vote
 from fastapi.middleware.cors import CORSMiddleware
-import models
 
 # list of origins that we are allowing to make requests to our
 # app
-origins = ["https://www.google.com"]
+origins = ["*"]
 
 # create all our models defined in models class
 # and using engine to connect to Postgres database
@@ -28,7 +27,7 @@ app.add_middleware(
 # Route: '/'
 @app.get("/")
 def root():
-    return {'content': 'Hello World!'}
+    return {'content': 'Hola el mundo.'}
 
 # add each APIRouter to the main FastAPI application
 # include all the routes from that router as part of it
