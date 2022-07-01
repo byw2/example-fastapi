@@ -3,3 +3,5 @@ __pycache__
 venv/
 # do not want to leak all our credentials
 .env
+# do not include .DS_Store
+.DS_Store
